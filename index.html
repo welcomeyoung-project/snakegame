@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game - Enhanced Multi-Theme Edition</title>
+    <link rel="stylesheet" href="assets/css/enhanced-styles.css">
+    <link rel="icon" href="assets/images/logo.svg" type="image/svg+xml">
+</head>
+<body>
+        <div class="game-container">
+        <header class="game-header">
+            <div class="game-title">
+                <img src="assets/images/logo.svg" alt="Snake Game Logo" class="game-logo">
+                <h1>🐍 Snake Game</h1>
+            </div>
+            
+            <div class="game-controls-compact">
+                <div class="quick-controls">
+                    <div class="control-item">
+                        <label for="theme-select">🎨</label>
+                        <select id="theme-select">
+                            <option value="classic">Classic</option>
+                            <option value="neon">Neon</option>
+                            <option value="retro">Retro</option>
+                            <option value="nature">Nature</option>
+                            <option value="candy">Candy</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </div>
+                    <div class="control-item">
+                        <label for="difficulty-select">⚡</label>
+                        <select id="difficulty-select">
+                            <option value="easy">Easy</option>
+                            <option value="normal">Normal</option>
+                            <option value="hard">Hard</option>
+                            <option value="expert">Expert</option>
+                            <option value="insane">Insane</option>
+                        </select>
+                    </div>
+                    <div class="control-item">
+                        <label for="board-size-select">📏</label>
+                        <select id="board-size-select">
+                            <option value="small">Small</option>
+                            <option value="medium">Medium</option>
+                            <option value="large">Large</option>
+                            <option value="xlarge">X-Large</option>
+                            <option value="huge">Huge</option>
+                        </select>
+                    </div>
+                    <div class="score-compact">
+                        <span class="score-item">Score: <span id="score">0</span></span>
+                        <span class="score-item">Best: <span id="high-score">0</span></span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="game-main-focused">
+            <div class="game-board-primary">
+                <canvas id="game-canvas" width="400" height="400"></canvas>
+                <div id="game-over-screen" class="game-over-screen hidden">
+                    <h2>🎮 Game Over!</h2>
+                    <p>Final Score: <span id="final-score">0</span></p>
+                    <p>Challenge yourself for a higher score!</p>
+                    <button id="restart-btn" class="btn btn-primary">🔄 Restart</button>
+                </div>
+            </div>
+            
+            <div class="game-sidebar">
+                <div class="game-actions-compact">
+                    <button id="start-btn" class="btn btn-primary">▶️ Start</button>
+                    <button id="pause-btn" class="btn btn-secondary">⏸️ Pause</button>
+                    <button id="reset-btn" class="btn btn-warning">🔄 Reset</button>
+                </div>
+
+                <div class="virtual-controls-compact">
+                    <div class="d-pad">
+                        <button class="d-btn d-up" data-direction="up">↑</button>
+                        <div class="d-row">
+                            <button class="d-btn d-left" data-direction="left">←</button>
+                            <button class="d-btn d-right" data-direction="right">→</button>
+                        </div>
+                        <button class="d-btn d-down" data-direction="down">↓</button>
+                    </div>
+                    <div class="control-hint">
+                        <p>🎮 Arrow keys or virtual D-pad</p>
+                        <p>⌨️ Spacebar to pause | Enter to start</p>
+                    </div>
+                </div>
+
+                <div class="game-info-compact">
+                    <div class="obstacles-legend-mini">
+                        <div class="obstacle-item-mini">
+                            <img src="assets/images/mine.svg" alt="Mine" class="obstacle-icon-mini">
+                            <span>Mine</span>
+                        </div>
+                        <div class="obstacle-item-mini">
+                            <img src="assets/images/rock.svg" alt="Rock" class="obstacle-icon-mini">
+                            <span>Rock</span>
+                        </div>
+                        <div class="obstacle-item-mini">
+                            <img src="assets/images/bomb.svg" alt="Bomb" class="obstacle-icon-mini">
+                            <span>Bomb</span>
+                        </div>
+                    </div>
+                    <div class="config-status">
+                        <div class="status-item">
+                            <span class="status-label">Difficulty:</span>
+                            <span class="status-value" id="difficulty-desc">Normal</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Size:</span>
+                            <span class="status-value" id="board-size-desc">Medium</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="game-footer-compact">
+            <p>🐍 Eat food to score, avoid obstacles | 💡 Try larger boards and higher difficulty</p>
+        </footer>
+    </div>
+
+    <script src="assets/js/enhanced-themes.js"></script>
+    <script src="assets/js/advanced-game.js"></script>
+    <script>
+        // Initialize game after page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.game = new AdvancedSnakeGame();
+            
+            // Apply current theme immediately
+            window.game.themeManager.applyTheme();
+            
+            // Initialize theme selector
+            const themeSelect = document.getElementById('theme-select');
+            const themes = window.game.themeManager.getAvailableThemes();
+            
+            themeSelect.innerHTML = '';
+            themes.forEach(theme => {
+                const option = document.createElement('option');
+                option.value = theme.id;
+                option.textContent = theme.name;
+                themeSelect.appendChild(option);
+            });
+            
+            themeSelect.value = window.game.themeManager.currentTheme;
+            
+            // Initialize difficulty selector
+            const difficultySelect = document.getElementById('difficulty-select');
+            const difficulties = window.game.config.difficulties;
+            
+            difficultySelect.innerHTML = '';
+            Object.keys(difficulties).forEach(key => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = difficulties[key].name;
+                difficultySelect.appendChild(option);
+            });
+            
+            difficultySelect.value = window.game.config.currentDifficulty;
+            
+            // Initialize board size selector
+            const boardSizeSelect = document.getElementById('board-size-select');
+            const boardSizes = window.game.config.boardSizes;
+            
+            boardSizeSelect.innerHTML = '';
+            Object.keys(boardSizes).forEach(key => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = boardSizes[key].name;
+                boardSizeSelect.appendChild(option);
+            });
+            
+            boardSizeSelect.value = window.game.config.currentBoardSize;
+            
+            // Add loading animation
+            document.body.classList.add('loaded');
+        });
+    </script>
+</body>
+</html>
