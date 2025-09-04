@@ -10,6 +10,8 @@ A feature-rich, modern Snake game with multiple theme support, developed using p
 
 
 
+
+
 ### 🎨 Six Beautiful Themes### 🎨 Six Beautiful Themes
 
 - **Classic Green** - Traditional green snake style, nostalgic classic- **Classic Green** - Traditional green snake style, nostalgic classic
