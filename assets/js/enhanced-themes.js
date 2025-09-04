@@ -213,7 +213,7 @@ class EnhancedThemeManager {
         const theme = this.getCurrentTheme();
         const root = document.documentElement;
 
-        // 设置CSS变量
+        // Set CSS variables
         root.style.setProperty('--bg-color', theme.background);
         root.style.setProperty('--grid-color', theme.gridColor);
         root.style.setProperty('--snake-head', theme.snake.head);
@@ -237,25 +237,35 @@ class EnhancedThemeManager {
         root.style.setProperty('--text-secondary', theme.ui.text === '#880e4f' ? 'rgba(136, 14, 79, 0.7)' : 'rgba(255, 255, 255, 0.7)');
         root.style.setProperty('--accent-color', theme.ui.accent);
         
-        // 设置RGB值（用于半透明效果）
+        // Set RGB values (for semi-transparent effects)
         const bgRgb = this.hexToRgb(theme.ui.background);
         const accentRgb = this.hexToRgb(theme.ui.accent);
         root.style.setProperty('--background-rgb', `${bgRgb.r}, ${bgRgb.g}, ${bgRgb.b}`);
         root.style.setProperty('--accent-rgb', `${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}`);
 
-        // Apply effect classes
-        document.body.className = '';
-        document.body.classList.add(`theme-${this.currentTheme}`);
+        // Apply effect classes without clearing existing classes
+        const body = document.body;
+        // Remove old theme classes only
+        const classesToRemove = [];
+        body.classList.forEach(className => {
+            if (className.startsWith('theme-') || className.includes('effects') || className.includes('animation-')) {
+                classesToRemove.push(className);
+            }
+        });
+        classesToRemove.forEach(className => body.classList.remove(className));
+        
+        // Add new theme classes
+        body.classList.add(`theme-${this.currentTheme}`);
         
         if (theme.effects.glow) {
-            document.body.classList.add('glow-effects');
+            body.classList.add('glow-effects');
         }
         
         if (theme.effects.particles) {
-            document.body.classList.add('particle-effects');
+            body.classList.add('particle-effects');
         }
 
-        document.body.classList.add(`animation-${theme.effects.animation}`);
+        body.classList.add(`animation-${theme.effects.animation}`);
 
         // Trigger theme change event
         document.dispatchEvent(new CustomEvent('themeChanged', {

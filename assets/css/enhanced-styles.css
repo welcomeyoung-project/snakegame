@@ -247,9 +247,10 @@ body {
     display: flex;
     flex: 1;
     gap: 20px;
-    align-items: flex-start;
+    align-items: stretch;
     justify-content: center;
     padding: 10px 0;
+    min-height: 600px;
 }
 
 /* 主游戏区域 */
@@ -261,14 +262,23 @@ body {
     padding: 20px;
     border: 2px solid var(--border-color);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 600px;
+    width: 480px;
 }
 
 /* 侧边栏区域 */
 .game-sidebar {
-    flex: 0 0 280px;
+    flex: 0 0 300px;
     display: flex;
     flex-direction: column;
     gap: 15px;
+    height: 600px;
+    justify-content: space-between;
+    align-items: stretch;
 }
 
 #game-canvas {
@@ -895,23 +905,34 @@ body {
 /* 移动端响应式设计 */
 @media (max-width: 768px) {
     .game-container {
-        padding: 5px;
+        padding: 10px;
     }
     
     .game-main-focused {
         flex-direction: column;
         gap: 15px;
-        padding: 5px 0;
+        align-items: center;
+        min-height: auto;
+    }
+    
+    .game-sidebar {
+        flex: none;
+        width: 100%;
+        max-width: 500px;
+        order: -1;
+    }
+    
+    .game-board-primary {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 15px;
     }
     
     .game-sidebar {
         flex: none;
         width: 100%;
         order: -1;
-    }
-    
-    .game-board-primary {
-        padding: 15px;
     }
     
     .quick-controls {
@@ -924,8 +945,77 @@ body {
         font-size: 12px;
         padding: 4px 8px;
     }
-    
-    .score-compact {
+}
+
+/* Layout Fix - Override previous styles for better alignment */
+.game-main-focused {
+    display: flex !important;
+    flex: 1 !important;
+    gap: 20px !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    padding: 10px 0 !important;
+    min-height: auto !important;
+}
+
+.game-board-primary {
+    flex: 0 0 auto !important;
+    position: relative !important;
+    background: rgba(var(--background-rgb), 0.5) !important;
+    border-radius: 15px !important;
+    padding: 20px !important;
+    border: 2px solid var(--border-color) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.game-sidebar {
+    flex: 0 0 280px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: stretch !important;
+}
+
+.game-actions-compact {
+    background: rgba(var(--background-rgb), 0.7) !important;
+    border: 2px solid var(--border-color) !important;
+    border-radius: 12px !important;
+    padding: 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+}
+
+.virtual-controls-compact {
+    background: rgba(var(--background-rgb), 0.7) !important;
+    border: 2px solid var(--border-color) !important;
+    border-radius: 12px !important;
+    padding: 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+}
+
+.game-info-compact {
+    background: rgba(var(--background-rgb), 0.7) !important;
+    border: 2px solid var(--border-color) !important;
+    border-radius: 12px !important;
+    padding: 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+}
+
+#game-canvas {
+    max-width: 400px !important;
+    max-height: 400px !important;
+    width: 400px !important;
+    height: 400px !important;
+}    .score-compact {
         gap: 10px;
         font-size: 12px;
     }

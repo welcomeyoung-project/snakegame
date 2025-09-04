@@ -343,13 +343,13 @@ class AdvancedSnakeGame {
         this.gamePaused = false;
         this.gameLoop = null;
         
-        // Snake initial state
-        this.snake = [{ x: 10, y: 10 }];
+        // Snake initial state - will be properly set in resetGame()
+        this.snake = [];
         this.direction = { x: 0, y: 0 };
         this.nextDirection = { x: 0, y: 0 };
         
-        // Food
-        this.food = { x: 15, y: 15 };
+        // Food - will be properly set in resetGame()
+        this.food = null;
         
         // Score
         this.score = 0;
@@ -362,17 +362,18 @@ class AdvancedSnakeGame {
         this.setupCanvas();
         this.setupEventListeners();
         this.themeManager.applyTheme();
+        this.resetGame(); // Initialize game state properly
         this.updateScoreDisplay();
         this.updateConfigDisplay();
-        this.draw();
     }
 
     setupCanvas() {
         const boardSize = this.config.getBoardSize();
         this.canvas.width = boardSize.width;
         this.canvas.height = boardSize.height;
-        this.canvas.style.maxWidth = '100%';
-        this.canvas.style.height = 'auto';
+        // Remove inline styles to let CSS handle sizing
+        this.canvas.style.maxWidth = '';
+        this.canvas.style.height = '';
     }
 
     setupEventListeners() {
@@ -382,6 +383,10 @@ class AdvancedSnakeGame {
         // Theme switching
         document.getElementById('theme-select').addEventListener('change', (e) => {
             this.themeManager.setTheme(e.target.value);
+            // Force redraw after theme change
+            setTimeout(() => {
+                this.draw();
+            }, 50);
         });
         
         // Difficulty switching
@@ -415,6 +420,8 @@ class AdvancedSnakeGame {
         // Theme change events
         document.addEventListener('themeChanged', () => {
             this.draw();
+            // Ensure canvas styling is updated
+            this.setupCanvas();
         });
 
         // Touch controls
@@ -763,6 +770,8 @@ class AdvancedSnakeGame {
     }
 
     drawFood(theme) {
+        if (!this.food) return; // Don't draw if food doesn't exist yet
+        
         const x = this.food.x * this.config.gridSize;
         const y = this.food.y * this.config.gridSize;
         
